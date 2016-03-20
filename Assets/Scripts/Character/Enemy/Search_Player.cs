@@ -14,21 +14,20 @@ public class Search_Player : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	void OnTriggerEnter (Collider col){
 
 		if(col.tag == "Player"){
+
             //トリガだけ渡す
             ecZ.Find();
+
         }
         if (col.tag == "Bullet")
         {
+
             if(col.GetComponent<Attack_Parameter>().GetParent() == Player)
-                if(ecZ.GetSearch() == Enemy_ControllerZ.Enemy_Search.Magic) ecZ.Find();
+            if(ecZ.GetSearch() == Enemy_ControllerZ.Enemy_Search.Magic) ecZ.Find();
+
         }
 	}
 
@@ -36,8 +35,10 @@ public class Search_Player : MonoBehaviour {
 
         if (col.tag == "Player")
         {
+
             //トリガだけ渡す
             ecZ.NotFind();
+
         }
 	}
 }

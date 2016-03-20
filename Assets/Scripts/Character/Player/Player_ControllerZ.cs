@@ -14,7 +14,6 @@ public class Player_ControllerZ : Character_Manager{
     private CharacterController playerController;//キャラクタコントローラで動かす場合
     private Animator animator;//アニメーション設定用
 	private Static save;
-
     public GameObject MainCamera;//動かす用のカメラ
 
     //初期パラメタ(邪魔なのでインスペクタに表示しない)
@@ -33,15 +32,14 @@ public class Player_ControllerZ : Character_Manager{
     private bool isDash = false;//ダッシュする
     public bool Dash = true;//ダッシュ中
     public float inputTime = 0.9f;//入力受付時間
-    //private int inputCount = 0;//入力は一回まで
     private string inputKey = "W";//入力(どの方向か)
     private float elapsedTime = 0.0f;
-
 
     public float RotSpeed = 0.1f;//曲がる速さ
 
     void Start()
     {
+
         playerController = GetComponent<CharacterController>();//rigidbodyを使う場合は外す
         animator = GetComponentInChildren<Animator>();//アニメータを使うとき
 		save = GameObject.FindGameObjectWithTag ("Manager").GetComponent<Static> ();
@@ -65,22 +63,21 @@ public class Player_ControllerZ : Character_Manager{
 
     void Update()
     {
+
         //HPがなくなった時の処理
         if (H_point <= 0)
         {
             save.H_Point = 100;//HPは満タンに
             GameObject.FindGameObjectWithTag("Manager").GetComponent<QuestManager>().Questfailure();
-            //Application.LoadLevel(Application.loadedLevel);
 
         }
 
         //アニメーションリセット///////////////////////////////////////////////////////////
         move_direction = new Vector3(0.0f, move_direction.y, 0.0f);
-        //キーボードからの入力読み込み/////////////////////////////////////////////////////
 
+        //キーボードからの入力読み込み/////////////////////////////////////////////////////
         float InputX = 0.0f;
         float InputY = 0.0f;
-
         Vector3 inputDirection = Vector3.zero;//入力された方向
 
         if (flag_move)
@@ -96,14 +93,19 @@ public class Player_ControllerZ : Character_Manager{
         {
             if (flag_move)
             {
-                if(!isSliding) flag_jump = true;//動けるときだけ地上にいたら。
+
+                if(!isSliding) flag_jump = true;//動けるときだけ,地上にいたら
+
             }
 
             move_direction = Vector3.zero;
             animator.SetBool("Jump", false);
+
             if (Input.GetButtonDown("Jump"))
             {
+
                 if (flag_jump) { Jump(); }
+
             }
 
         }
@@ -115,6 +117,7 @@ public class Player_ControllerZ : Character_Manager{
             {
                 if (Input.GetKey(KeyCode.W))
                 {
+
                     //Playerの方向 = (最初の方向,向けたい方向,向けたい速度)
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), RotSpeed);//Playerをターゲットのほうにゆっくり向ける
                     transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);//Playerのx,zの回転を直す。回転嫌い。全部Eulerにしてしまえばよい
@@ -122,6 +125,7 @@ public class Player_ControllerZ : Character_Manager{
                 }
                 if (Input.GetKey(KeyCode.S))
                 {
+
                     //Playerの方向 = (最初の方向,向けたい方向,向けたい速度)
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MainCamera.transform.TransformDirection(Vector3.back)), RotSpeed);//Playerをターゲットのほうにゆっくり向ける
                     transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);//Playerのx,zの回転を直す。回転嫌い。全部Eulerにしてしまえばよい
@@ -129,6 +133,7 @@ public class Player_ControllerZ : Character_Manager{
                 }
                 if (Input.GetKey(KeyCode.A))
                 {
+
                     //Playerの方向 = (最初の方向,向けたい方向,向けたい速度)
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MainCamera.transform.TransformDirection(Vector3.left)), RotSpeed);//Playerをターゲットのほうにゆっくり向ける
                     transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);//Playerのx,zの回転を直す。回転嫌い。全部Eulerにしてしまえばよい
@@ -136,18 +141,16 @@ public class Player_ControllerZ : Character_Manager{
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
+
                     //Playerの方向 = (最初の方向,向けたい方向,向けたい速度)
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MainCamera.transform.TransformDirection(Vector3.right)), RotSpeed);//Playerをターゲットのほうにゆっくり向ける
                     transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);//Playerのx,zの回転を直す。回転嫌い。全部Eulerにしてしまえばよい
 
                 }
             }
-            
-            
         }
 
         //カメラの方向を取得　それに合わせて動かす
-        //direction = transform.TransformDirection(Vector3.forward);
         direction = MainCamera.transform.TransformDirection(Vector3.forward);
 
         //キャラクタ移動処理
@@ -169,9 +172,7 @@ public class Player_ControllerZ : Character_Manager{
         if (Input.GetKeyDown(KeyCode.W))
         {
             if (!flag_Dash)
-            {
                 inputKey = "W";
-            }                
             flag_Dash = true;
         }
         if (Input.GetKeyDown(KeyCode.A))
@@ -197,11 +198,14 @@ public class Player_ControllerZ : Character_Manager{
         {
             if (flag_Dash)
             {
+
                 elapsedTime += Time.deltaTime;
                 if (elapsedTime > inputTime)
                 {
+
                     flag_Dash = false;
                     elapsedTime = 0;
+
                 }
 
                 switch (inputKey)
@@ -209,64 +213,80 @@ public class Player_ControllerZ : Character_Manager{
                     case "W":
                         if (Input.GetKeyUp(KeyCode.W))//押しっぱなしで発動しないよう
                         {
+
                             isDash = true;
+
                         }
                         if (isDash)
                         {
-                            if (Input.GetKeyDown(KeyCode.W))//
+                            if (Input.GetKeyDown(KeyCode.W))
                             {
+
                                 speed = 2 * base_Sp;
                                 elapsedTime = 0;
                                 isDash = false;
                                 flag_Dash = false;
+
                             }
                         }
                         break;
                     case "A":
                         if (Input.GetKeyUp(KeyCode.A))
                         {
+
                             isDash = true;
+
                         }
                         if (isDash)
                         {
-                            if (Input.GetKeyDown(KeyCode.A))//
+                            if (Input.GetKeyDown(KeyCode.A))
                             {
+
                                 speed = 2 * base_Sp;
                                 elapsedTime = 0;
                                 isDash = false;
                                 flag_Dash = false;
+
                             }
                         }
                         break;
                     case "S":
                         if (Input.GetKeyUp(KeyCode.S))
                         {
+
                             isDash = true;
+
                         }
                         if (isDash)
                         {
-                            if (Input.GetKeyDown(KeyCode.S))//
+                            if (Input.GetKeyDown(KeyCode.S))
                             {
+
                                 speed = 2 * base_Sp;
                                 elapsedTime = 0;
                                 isDash = false;
                                 flag_Dash = false;
+
                             }
                         }
                         break;
                     case "D":
                         if (Input.GetKeyUp(KeyCode.D))
                         {
+
                             isDash = true;
+
                         }
                         if (isDash)
                         {
-                            if (Input.GetKeyDown(KeyCode.D))//
+                            if (Input.GetKeyDown(KeyCode.D))
                             {
+
                                 speed = 2 * base_Sp;
                                 elapsedTime = 0;
                                 isDash = false;
                                 flag_Dash = false;
+
                             }
                         }
                         break;
@@ -274,20 +294,24 @@ public class Player_ControllerZ : Character_Manager{
             }
         }
         
-
         if (inputDirection.magnitude == 0)//ダッシュ解除
         {
+
             speed = base_Sp;
             flag_Dash = false;
+
         }
 
         //坂に立ってたら滑らす
         if (isSliding)
-        {//滑るフラグが立ってたら
+        {
+            
+            //滑るフラグが立ってたら
             Vector3 hitNormal = slideHit.normal;
             move_direction.x = hitNormal.x * slideSpeed;
             move_direction.z = hitNormal.z * slideSpeed;
             isSliding = false;//ここでリセットしとく
+
         }
 
         //キャラにかかる重力決定（少しふわふわさせてる）
@@ -306,6 +330,7 @@ public class Player_ControllerZ : Character_Manager{
     //ジャンプ
     void Jump()
     {
+
         flag_jump = false;
 
         move_direction.y = jump;
@@ -319,24 +344,31 @@ public class Player_ControllerZ : Character_Manager{
 
         if (Input.GetKey(KeyCode.W))
         {
+
             move_direction.x += direction.x;
             move_direction.z += direction.z;
 
         }
         if (Input.GetKey(KeyCode.S))
         {
+
             move_direction.x -= direction.x;
             move_direction.z -= direction.z;
+
         }
         if (Input.GetKey(KeyCode.A))
         {
+
             move_direction.x -= direction.z;
             move_direction.z += direction.x;
+
         }
         if (Input.GetKey(KeyCode.D))
         {
+
             move_direction.x += direction.z;
             move_direction.z -= direction.x;
+
         }
     }
 
@@ -346,17 +378,18 @@ public class Player_ControllerZ : Character_Manager{
         if (!playerController.isGrounded)
         {
             //キャラクターの位置から下方向にRayを飛ばす（指定レイヤー限定※この場合は地面コリジョンのレイヤー）
-            //RayLengthは、Rayを飛ばす距離。私の場合は地面の位置すれすれまで飛ばしてます（地面の高さは固定な前提）
+            //RayLengthは、Rayを飛ばす距離。私の場合は地面の位置すれすれまで飛ばす（地面の高さは固定な前提）
             //レイヤーマスクは⇒で指定 int layerMask =1 << LayerMask.NameToLayer("レイヤー名");
             if (Physics.Raycast(transform.position, Vector3.down, out slideHit, 10))
             {
-                //衝突した際の面の角度とが滑らせたい角度以上かどうかを調べます。
+                //衝突した際の面の角度とが滑らせたい角度以上かどうかを調べる
                 if (Vector3.Angle(slideHit.normal, Vector3.up) > playerController.slopeLimit)
                 {
+
                     isSliding = true;
+
                 }
             }
-            
         }
     }
 }

@@ -24,13 +24,9 @@ public class Enemy_ControllerZ : Enemy_Parameter
 
     [System.NonSerialized]
     public GameObject Player;//操作キャラ
-
     public Transform Territory;//縄張り
 
-    public bool frontWall = false;//前に壁がある
-
-    //汎用
-    
+    public bool frontWall = false;//前に壁がある    
 
     //初期パラメタ(邪魔なのでインスペクタに表示しない)
     [System.NonSerialized]
@@ -41,6 +37,7 @@ public class Enemy_ControllerZ : Enemy_Parameter
     // Use this for initialization
     void Start()
     {
+
         move_controller = GetComponent<Move_Controller>();
         Player = GameObject.FindGameObjectWithTag("Player");
         if (Territory == null) Territory = this.gameObject.transform;//テリトリーがない場合は自分の位置を入れといて変な挙動をしないようにする
@@ -48,6 +45,7 @@ public class Enemy_ControllerZ : Enemy_Parameter
         //移動方法によって動きを変える
         switch (move)
         {
+
             case Enemy_Move.Ground://×ナビで動く　○自力で
                 MoveS = GetComponent<MoveSmooth>();
                 break;
@@ -58,6 +56,7 @@ public class Enemy_ControllerZ : Enemy_Parameter
                 break;
             default:
                 break;
+
         }
 
         //初期パラメタを保存
@@ -81,58 +80,7 @@ public class Enemy_ControllerZ : Enemy_Parameter
             GameObject.FindGameObjectWithTag("Manager").GetComponent<QuestManager>().SetCount(CharaName);
 
         }
-
-        //索敵    撤去
-        /*
-        if (state == Enemy_State.Search)
-        {
-            //どっちかある方移動
-            if(MoveS != null)
-            MoveS.Move(move_controller.End,speed);
-
-            //前を向ける
-            transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(move_controller.End - transform.localPosition), 0.05f);
-            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-
-        }*/
-
-        //逃げ    撤去
-        /*
-        if (state == Enemy_State.Run)
-        {
-
-            Vector3 follow = (Player.transform.localPosition - this.transform.localPosition).normalized;
-            follow.y = 0.0f;
-
-            //どっちかある方移動
-            if (MoveS != null)
-                MoveS.Move(-follow * speed, speed);
-
-            transform.localRotation = Quaternion.LookRotation(-follow);
-
-        }*/
-
-        //Returnは個別のほうがよさげ
-        /*if (state == Enemy_State.Return)
-        {
-            time += Time.deltaTime;
-
-            //とりあえず中心へ(Territoryはワールド座標にしとく)
-            if (Nav != null)
-                Nav.Move(Territory.position);
-            if (MoveS != null)
-                MoveS.Move(Territory.position, speed);
-
-            //前を向ける
-            transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(Territory.position - transform.localPosition), 0.05f);
-            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-            
-            if(time > 10.0f)
-            {
-                state = old_state;//10秒くらいたったら元の状態に戻す
-            }
-        }*/
-
+        
         //レイキャストで何とかして壁に当たらないようにする
         RaycastHit hit;
         Vector3 StartPos = transform.position + new Vector3(0,transform.localScale.y,0);//とりあえず頭から出す
@@ -140,40 +88,43 @@ public class Enemy_ControllerZ : Enemy_Parameter
         //これのとき前に壁がある
         if (Physics.Raycast(StartPos, transform.TransformDirection(Vector3.forward), out hit ,20))
         {
-            //Debug.DrawLine(StartPos, hit.point, Color.green);
+
             frontWall = true;
 
         }
         else
         {
+
             frontWall = false;
+
         }
 
         //レイキャストで浮かせる
         RaycastHit hit_float;
         Vector3 StartPos_float = transform.position;//とりあえず足元から出す
 
-        //
         if (move == Enemy_Move.Float)//浮いてるやつの高さ調整
         {
             if (Physics.Raycast(StartPos_float, transform.TransformDirection(Vector3.down), out hit_float, jump))//jumpが高さ
             {
-                //Debug.DrawLine(StartPos_float, hit_float.point, Color.green);
+
                 transform.position = new Vector3(transform.position.x, hit_float.point.y + jump, transform.position.z);//高さを固定する
 
             }
             else//下の足場に下りようとしてる
             {
+
                 Move(Vector3.down, speed);
+
             }
         }
             
-
         direction = transform.TransformDirection(Vector3.forward);//向き
 
         //移動用
         if (isMove)
         {
+
             transform.position += deltaPos * Time.deltaTime;
             elapsedTime += Time.deltaTime;
             if (elapsedTime > time)
@@ -193,13 +144,12 @@ public class Enemy_ControllerZ : Enemy_Parameter
     private Vector3 EndPos;
     private float time = 5;
     private Vector3 deltaPos;
-
     private float elapsedTime;
-
     private bool isMove = false;
 
     public void Move(Vector3 End, float speed)
     {
+
         elapsedTime = 0;
         EndPos = End;
         StartPos = transform.position;
@@ -211,11 +161,12 @@ public class Enemy_ControllerZ : Enemy_Parameter
 
     public void Stop()
     {
+
         isMove = false;//これで止まる
+
     }
 
     //状態管理//////////////////////////////////////////////////////////////////////////////
-    //優先順位も個別でやるべき
     //トリガ
     public bool isFind = false;
     public bool isDamage = false;
@@ -223,32 +174,44 @@ public class Enemy_ControllerZ : Enemy_Parameter
 
     public void Find()
     {
+
         isFind = true;
+
     }
 
     public void NotFind()
     {
+
         isFind = false;
+
     }
 
     public void Damage()
     {
+
         isDamage = true;
+
     }
 
     public void NotDamage()
     {
+
         isDamage = false;
+
     }
 
     //縄張りから外れた時に戻ってくるよう
     public void Return()
     {
+
         isReturn = true;
+
     }
     public void NotReturn()
     {
+
         isReturn = false;
+
     }
 
 }

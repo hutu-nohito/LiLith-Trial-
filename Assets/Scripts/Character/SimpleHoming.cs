@@ -7,31 +7,36 @@ public class SimpleHoming : MonoBehaviour {
     private GameObject Target;
     private GameObject oldTarget;//ちょっと前のターゲット　基本こいつを追うことにする
     private bool flag_Stop = false;//高さだけにする
-
     private Vision vision;
-    private Attack_Parameter At;//一緒にくっついてるやつ。たぶん継承してれば名前が違くてもいけたはず
+    private Attack_Parameter At;//一緒にくっついてるやつ。
 
     /// 旋回速度
     public float _rotSpeed = 1.0f;
 
-    /// 現在の角度がこれで求まるらしい
+    /// 現在の角度がこれで求まる
     float Direction
     {
+
         get { return Mathf.Atan2(this.GetComponent<Rigidbody>().velocity.z, this.GetComponent<Rigidbody>().velocity.x) * Mathf.Rad2Deg; }
+
     }
 
     // Use this for initialization
     void Start()
     {
+
         vision = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Vision>();
         At = GetComponent<Attack_Parameter>();
         oldTarget = vision.nearTarget;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
         Target = vision.nearTarget;
+
         //注目対象が別のになったらホーミングを切る
         if (oldTarget != Target) this.enabled = false;
 
@@ -49,17 +54,20 @@ public class SimpleHoming : MonoBehaviour {
             var newAngle = Direction;
             if (Mathf.Abs(deltaAngle) < _rotSpeed)
             {
+
                 // 旋回速度を下回る角度差なので何もしない
 
             }
             else if (deltaAngle > 0)
             {
+
                 // 左回り
                 newAngle += _rotSpeed;
 
             }
             else
             {
+
                 // 右回り
                 newAngle -= _rotSpeed;
 
@@ -73,11 +81,14 @@ public class SimpleHoming : MonoBehaviour {
 
     public void TargetSet(GameObject Target)
     {
+
         this.Target = Target;
+
     }
 
     void SetVelocity(float direction, float speed)
     {
+
         var vx = Mathf.Cos(Mathf.Deg2Rad * direction) * speed;
         var vz = Mathf.Sin(Mathf.Deg2Rad * direction) * speed;
 
@@ -94,5 +105,7 @@ public class SimpleHoming : MonoBehaviour {
         if (flag_Stop) { vx = 0; vz = 0; flag_Stop = false; }
 
         this.GetComponent<Rigidbody>().velocity = new Vector3(vx, vy, vz);
+
     }
+
 }

@@ -8,7 +8,7 @@ public class ElementFloat : MonoBehaviour {
 
         (Serch) → Player → (Attack) → 距離10m以下 → 固有攻撃 　→  距離　→　yes → Serchへ
                                ↓                                20m以上
-                           距離10m以上      →   ワープ回り込み →  Attackへ
+                           距離10m以上      →                 →  Attackへ
 
     */
 
@@ -23,31 +23,19 @@ public class ElementFloat : MonoBehaviour {
         2:  Crescent
         3:  Icicle
 
-        */
+    */
 
+    //システム
     private Enemy_ControllerZ ecZ;
     private MoveSmooth MS;//移動は全部これ
     private Camera_ControllerZ CCZ;
 
+    //演出
     private Animator animator;//アニメーションはふよふよと攻撃モーションのみ
-    private AudioSource[] SE;//音
 
     //汎用
-    private float time = 0;//使ったら戻す
     private Coroutine coroutine;//一度に動かすコルーチンは1つ ここでとっとけば止めるのが楽
     private bool isCoroutine = false;//コルーチンを止めるときにはfalseに戻すこと
-
-
-    private int priority = 0;//状態の優先度
-    /*
-    isReturn  1 こうしないとどっかにワープしてっちゃう
-
-    Attack    2
-    isDamage  3
-    
-    isFind    4
-    Search    5
-    */
 
     //キャラクタ固有の状態
     //アニメーションは基本ここで管理するのでこれを使うときは向こうはIdleにでもしとく
@@ -61,20 +49,29 @@ public class ElementFloat : MonoBehaviour {
     public Element_State state = Element_State.Search;
     public Element_State GetState() { return state; }
     public void SetState(Element_State state) { this.state = state; }
+    private int priority = 0;//状態の優先度
+    /*
+    isReturn  1 こうしないとどっかにワープしてっちゃう
 
+    Attack    2
+    isDamage  3
+    
+    isFind    4
+    Search    5
+    */
     private Element_State oldstate = Element_State.Search;
 
     // Use this for initialization
     void Start()
     {
 
+        //システム
         ecZ = GetComponent<Enemy_ControllerZ>();
         MS = GetComponent<MoveSmooth>();
         animator = GetComponentInChildren<Animator>();
-        //SE = GetComponent<AudioSource>();
 
+        //初期化
         CCZ = Camera.main.gameObject.GetComponent<Camera_ControllerZ>();
-
         priority = 5;//最初はサーチに
     }
 
@@ -85,20 +82,20 @@ public class ElementFloat : MonoBehaviour {
         {
             if (priority >= 1)
             {
+
                 state = Element_State.Return;
                 priority = 1;
+
             }
 
         }
         if (state == Element_State.Return)
         {
-
             if (priority >= 1)
             {
-                priority = 1;
-                //アニメーションセット
-                //animator.SetTrigger("Walk");//歩き
 
+                priority = 1;
+                
                 //とりあえず中心へ(Territoryはワールド座標にしとく)
                 ecZ.Move(ecZ.Territory.position, ecZ.speed);
 
@@ -112,9 +109,7 @@ public class ElementFloat : MonoBehaviour {
                     state = Element_State.Search;
                     priority = 5;
                 }
-
             }
-
         }
 
         if (state == Element_State.Attack)
@@ -136,6 +131,7 @@ public class ElementFloat : MonoBehaviour {
             {
                 if (state != Element_State.Damage)
                 {
+
                     state = Element_State.Damage;
                     priority = 3;
                     //前を向ける
@@ -143,9 +139,9 @@ public class ElementFloat : MonoBehaviour {
                     transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
                     //アニメーションセット
                     animator.SetTrigger("Damage");//ダメージ
+
                 }
             }
-
         }
         if (state == Element_State.Damage)
         {
@@ -154,10 +150,7 @@ public class ElementFloat : MonoBehaviour {
             {
 
                 priority = 3;
-
-                //アニメーションセット
-                //animator.SetTrigger("Kyorokyoro");//ここできょろきょろ                  
-
+                
                 //前を向ける
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(ecZ.Player.transform.position - transform.position), 0.05f);
                 transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
@@ -167,9 +160,7 @@ public class ElementFloat : MonoBehaviour {
             {
 
                 priority = 3;
-                //アニメーションセット
-                //animator.SetTrigger("Walk");//歩き
-
+                
                 //前を向ける
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(ecZ.Player.transform.position - transform.position), 0.05f);
                 transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
@@ -178,16 +169,17 @@ public class ElementFloat : MonoBehaviour {
                 ecZ.Move((transform.position - ecZ.Player.transform.position).normalized * 5, 1);//ﾌﾟﾚｲﾔから距離をとる
                 coroutine = StartCoroutine(Run());
                 ecZ.Stop();//こけた時まれに下方向に力が働くので一応止めとく
+
             }
         }
-
-
 
         if (ecZ.isFind)
         {
             if (priority >= 4)
             {
+
                 state = Element_State.Attack;
+
             }
         }
 
@@ -196,8 +188,6 @@ public class ElementFloat : MonoBehaviour {
             if (priority >= 5)
             {
                 priority = 5;
-                //アニメーションセット
-                //animator.SetTrigger("Walk");//歩き
 
                 //前を向ける
                 transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(ecZ.move_controller.End - transform.localPosition), 0.05f);
@@ -212,14 +202,16 @@ public class ElementFloat : MonoBehaviour {
         //状態が変化したら前の状態のいどうは中断
         if (oldstate != state)
         {
-            time = 0;
+
             MS.Stop();
             ecZ.Stop();
+
         }
         oldstate = state;
 
     }
 
+    //逃げる
     IEnumerator Run()
     {
 
@@ -235,6 +227,7 @@ public class ElementFloat : MonoBehaviour {
 
     }
 
+    //攻撃
     IEnumerator Attack()
     {
 
@@ -245,50 +238,21 @@ public class ElementFloat : MonoBehaviour {
         yield return new WaitForSeconds(1);//ちょっと間をおいてから攻撃
 
         GameObject bullet;
-
-        //アニメーションセット
-        //animator.SetTrigger("Attack");//攻撃
-
-
+        
         bullet = GameObject.Instantiate(Bullet[0]);//通常弾　flame
         bullet.GetComponent<Attack_Parameter>().Parent = this.gameObject;//誰が撃ったかを渡す
-                                                                         //弾を飛ばす処理
         bullet.transform.position = Muzzle[0].position;//Muzzleの位置
         bullet.transform.rotation = Quaternion.LookRotation(ecZ.direction);//回転させて弾頭を進行方向に向ける
-
         bullet.GetComponent<Rigidbody>().velocity = (ecZ.Player.transform.position - transform.position).normalized * bullet.GetComponent<Attack_Parameter>().speed;//ﾌﾟﾚｲﾔに向けて撃つ
-
         Destroy(bullet, bullet.GetComponent<Attack_Parameter>().GetA_Time());
 
         yield return new WaitForSeconds(bullet.GetComponent<Attack_Parameter>().GetR_Time());//撃った後の硬直
 
         ecZ.Move((transform.position - ecZ.Player.transform.position).normalized * 50, 1);//ﾌﾟﾚｲﾔから距離をとる
-
-
-        //Bomb
-        if (Enemy_Level == 1)
-        {
-        }
-
-        //Kanketusen
-        if (Enemy_Level == 2)
-        {
-
-        }
-
-        //Meteor
-        if (Enemy_Level == 3)
-        {
-
-        }
-
-
+        
         ecZ.Reverse_Magic();
-
         state = Element_State.Search;//Search状態に戻す
         priority = 5;
-
-
         isCoroutine = false;
 
     }

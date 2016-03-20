@@ -15,11 +15,8 @@ public class SimpleMove : MonoBehaviour {
 	public Move_Type element = Move_Type.Line;
 
 	public Vector3 Control = Vector3.zero;
-
 	public GameObject Player;
-
-	private float time = 0;
-
+    
     //Sin用
     private MoveSmooth MS;
     private Move_Controller MC;
@@ -33,8 +30,10 @@ public class SimpleMove : MonoBehaviour {
         //Sinで動かすときはこの二つが必要
         if(element == Move_Type.Sin)
         {
+
             MS = GetComponent<MoveSmooth>();
             MC = GetComponent<Move_Controller>();
+
         }
 
 	}
@@ -42,33 +41,36 @@ public class SimpleMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		switch(element){
-		case Move_Type.Line:
-			Line();
-			break;
-		case Move_Type.Rotate:
-			Rotate();
-			break;
-		case Move_Type.Sin:
-			Sin();
-			break;
-		case Move_Type.Scale:
-			Scale();
-			break;
-		case Move_Type.Follow:
-			Follow();
-			break;
-		case Move_Type.Destroy:
-			Destroy ();
-			break;
-		case Move_Type.Look:
-			Look();
-			break;
-		default:
-			break;
-		}
-		
-	}
+        switch (element)
+        {
+
+            case Move_Type.Line:
+                Line();
+                break;
+            case Move_Type.Rotate:
+                Rotate();
+                break;
+            case Move_Type.Sin:
+                Sin();
+                break;
+            case Move_Type.Scale:
+                Scale();
+                break;
+            case Move_Type.Follow:
+                Follow();
+                break;
+            case Move_Type.Destroy:
+                Destroy();
+                break;
+            case Move_Type.Look:
+                Look();
+                break;
+            default:
+                break;
+
+        }
+
+    }
 
 	void Line (){
 
@@ -79,7 +81,6 @@ public class SimpleMove : MonoBehaviour {
 	void Rotate (){
 
 		transform.Rotate(Control * Time.deltaTime);
-		//transform.localEulerAngles += Control * Time.deltaTime;
 
 	}
 
@@ -110,11 +111,8 @@ public class SimpleMove : MonoBehaviour {
 
 	}
 
-	//挙動がおかしい
 	void Look (){
-
-		/*Vector3 look = this.transform.position - Player.transform.position;
-		transform.rotation = Quaternion.LookRotation(Control.x * look);*/
+        
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 0.1f);//これをPlayerのほうにゆっくり向ける
 		
 	}

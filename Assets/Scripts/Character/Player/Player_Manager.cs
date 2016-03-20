@@ -8,6 +8,7 @@ public class Player_Manager : MonoBehaviour {
 	public GameObject Parent;//このあたり判定を持つキャラ
 	private Player_ControllerZ pcZ;
 
+    //演出
     private Renderer[] PlayerRenderer;//プレイヤのレンダー1
     private Renderer[] PlayerSkinRenderer;//プレイヤのレンダー2
     public GameObject PlayerModel;//プレイヤのモデル
@@ -24,11 +25,9 @@ public class Player_Manager : MonoBehaviour {
     private float time = 0.5f;
     private float elapsedTime;
 
-
     void Start () {
 		
 		pcZ = Parent.GetComponent<Player_ControllerZ>();
-
         PlayerRenderer = PlayerModel.GetComponentsInChildren<MeshRenderer>();
         PlayerSkinRenderer = PlayerModel.GetComponentsInChildren<SkinnedMeshRenderer>();
 
@@ -44,20 +43,20 @@ public class Player_Manager : MonoBehaviour {
 
         if (flag_knockback)
         {
+
             Parent.transform.position += deltaPos * Time.deltaTime;
             elapsedTime += Time.deltaTime;
             if (elapsedTime > time)
             {
-
-                //Parent.transform.position = EndPos;//正確に動かす必要はない
+                
                 elapsedTime = 0;
                 flag_knockback = false;
                 
             }
         }
-
     }
 
+    //毒
 	IEnumerator Poison (){
 
 		if(isCoroutine){yield break;}
@@ -112,12 +111,11 @@ public class Player_Manager : MonoBehaviour {
                 //実際のダメージ処理
                 if (pcZ.GetF_Damage())
                 {
+
                     pcZ.H_point -= damage;
-                    //pcZ.Reverse_Damage();//ダメージを連続で受けないようにする
                     StartCoroutine(Blink());//点滅
-                    //Invoke("Reverse_Damage", 3);
+
                 }
-                
 
                 //こっから状態異常///////////////////////////////////////////////////////////
 
@@ -131,12 +129,13 @@ public class Player_Manager : MonoBehaviour {
                 //こっからノックバック
                 if (attack.GetKnockBack().magnitude > 0)
                 {
-                    //time = attack.GetKnockBack().magnitude;
+
                     EndPos = Parent.transform.position + col.transform.TransformDirection(attack.GetKnockBack());
                     deltaPos = (EndPos - Parent.transform.position) / time;
                     flag_knockback = true;
                     pcZ.SetKeylock();//行動不能だったと思う
                     Invoke("SetActive", time);
+
                 }
             }
 		}
@@ -149,36 +148,50 @@ public class Player_Manager : MonoBehaviour {
         {
             for (int i = 0; i < PlayerRenderer.Length; i++)
             {
+
                 PlayerRenderer[i].enabled = !PlayerRenderer[i].enabled;
+
             }
             for (int i = 0; i < PlayerSkinRenderer.Length; i++)
             {
+
                 PlayerSkinRenderer[i].enabled = !PlayerSkinRenderer[i].enabled;
+
             }
 
             yield return new WaitForSeconds(0.1f);
+
         }
 
         //消えるの対策
         for (int i = 0; i < PlayerRenderer.Length; i++)
         {
+
             PlayerRenderer[i].enabled = true;
+
         }
         for (int i = 0; i < PlayerSkinRenderer.Length; i++)
         {
+
             PlayerSkinRenderer[i].enabled = true;
+
         }
 
     }
 
     void Reverse_Damage()
     {
+
         StopCoroutine("Blink");
         pcZ.Reverse_Damage();//無敵時間解除
+
     }
 
     void SetActive()
     {
+
         pcZ.SetActive();//無敵時間解除
+
     }
+
 }

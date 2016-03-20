@@ -23,24 +23,34 @@ public class Character_Manager : Character_Parameters {
     public void Reverse_Damage() { flag_damage = !flag_damage; }//ダメージ反転
     public void Reverse_Magic() { flag_magic = !flag_magic; }//魔法反転
 
-    public void SetKeylock() { 
+    //操作禁止
+    public void SetKeylock()
+    { 
+
     flag_move = false;
     flag_jump = false;
     flag_magic = false;
-    }//操作禁止
 
+    }
+
+    //キーロック解除
     public void SetActive()
     {
+
         flag_move = true;
         flag_jump = true;
         flag_magic = true;
-    }//キーロック解除
 
+    }
+
+    //移動禁止
     public void SetMovelock()
     {
+
         flag_move = false;
         flag_jump = false;
-    }//移動禁止
+
+    }
 
     public bool flag_watch = false;//注目しているかどうか
     public bool GetF_Watch() { return flag_watch; }//注目しているか
@@ -58,7 +68,5 @@ public class Character_Manager : Character_Parameters {
     public bool flag_invincible = false;//無敵かどうか
     public bool GetInvincible() { return flag_invincible; }
     public void ReverseInvincible() { flag_invincible = !flag_invincible; }
-
-    //public bool flag_speedUp = false;//加速状態
 
 }

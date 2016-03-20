@@ -9,6 +9,7 @@ public class Damage_Manager : MonoBehaviour {
 	public bool weak_point = false;
 	private Enemy_ControllerZ ecZ;
 
+    //描画
     private Renderer[] Renderer;//レンダー1
     private Renderer[] SkinRenderer;//レンダー2
     public GameObject Model;//モデル
@@ -23,8 +24,10 @@ public class Damage_Manager : MonoBehaviour {
 
     void Start () {
 
+        //処理
 		ecZ = Parent.GetComponent<Enemy_ControllerZ>();
 
+        //描画
         Renderer = Model.GetComponentsInChildren<MeshRenderer>();
         SkinRenderer = Model.GetComponentsInChildren<SkinnedMeshRenderer>();
 
@@ -40,6 +43,8 @@ public class Damage_Manager : MonoBehaviour {
         }
 
 	}
+
+    //毒の処理
     IEnumerator Poison()
     {
 
@@ -121,11 +126,13 @@ public class Damage_Manager : MonoBehaviour {
                 //実際のダメージ処理
                 if (ecZ.GetF_Damage())
                 {
+
                     ecZ.H_point -= damage;
                     ecZ.Damage();//とりあえずダメージを受けたことを知らせる
                     ecZ.Reverse_Damage();//ダメージを連続で受けないようにする
                     //StartCoroutine(Blink());
                     Invoke("Reverse_Damage", 0.5f);
+
                 }
 
                 //こっから状態異常///////////////////////////////////////////////////////////
@@ -142,18 +149,21 @@ public class Damage_Manager : MonoBehaviour {
                 {
                     if (attack.GetKnockBack().magnitude > 0)
                     {
+
                         Parent.GetComponent<Rigidbody>().AddForce(-col.transform.TransformDirection(attack.GetKnockBack()), ForceMode.Impulse);//Yが上下逆
                         ecZ.SetKeylock();//行動不能だったと思う
                         Invoke("SetActive", 1);
+
                     }
                 }
 
                 //こっから演出
                 for (int i = 0; i < Effects.Length; i++)
                 {
-                    //Effects[i].transform.parent = null;//子供にしとくとたいてい消える
+                    
                     Effects[i].SetActive(true);
                     StartCoroutine(ErasseEffect(Effects[i]));
+
                 }
 
             }
@@ -169,10 +179,13 @@ public class Damage_Manager : MonoBehaviour {
         {
             for (int i = 0; i < Renderer.Length; i++)
             {
+
                 Renderer[i].enabled = !Renderer[i].enabled;
+
             }
             for (int i = 0; i < SkinRenderer.Length; i++)
             {
+
                 SkinRenderer[i].enabled = !SkinRenderer[i].enabled;
 
             }
@@ -183,31 +196,42 @@ public class Damage_Manager : MonoBehaviour {
         //なんか消えてることがあったのでとりあえず強制的につける
         for (int i = 0; i < Renderer.Length; i++)
         {
+
             Renderer[i].enabled = true;
+
         }
         for (int i = 0; i < SkinRenderer.Length; i++)
         {
+
             SkinRenderer[i].enabled = true;
 
         }
 
     }
 
+    //ダメージ後処理
     void Reverse_Damage()
     {
+
         ecZ.Reverse_Damage();//無敵時間解除
         ecZ.NotDamage();//ダメージ受けおわり
+
     }
 
+    //無敵時間解除
     void SetActive()
     {
-        ecZ.SetActive();//無敵時間解除
+
+        ecZ.SetActive();
+
     }
 
     IEnumerator ErasseEffect(GameObject Effect)
     {
+
         yield return new WaitForSeconds(0.5f);//エフェクトが出てる時間
 
         Effect.SetActive(false);
+
     }
 }

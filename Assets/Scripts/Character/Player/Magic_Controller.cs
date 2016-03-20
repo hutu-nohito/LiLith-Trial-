@@ -14,14 +14,12 @@ public class Magic_Controller : MonoBehaviour{
     private Player_ControllerZ Pz;
     private Static _static;
 
-    //変数(ex:time)////////////////////////////////
-
     public int magic_num = 0;//選択している弾の種類
     private int old_magic_num = 0;//1つ前の選択してる魔法の種類
     public int[] selectmagic = new int[5];//選ばれた魔法の番号
-
     private bool isHold;//ホールド中　魔法が切り替わらないようにする
     private List<GameObject> Bullet0 = new List<GameObject>();//0個目に登録されてる弾の現在存在してる数
+
     //バレット切り替えた時用(それぞれの魔法の弾を格納)
     private List<GameObject> oldBullet0 = new List<GameObject>();
     private List<GameObject> oldBullet1 = new List<GameObject>();
@@ -31,21 +29,19 @@ public class Magic_Controller : MonoBehaviour{
     //増やすのは各自でやってもらう
     public void AddExistBullet(GameObject bullet)//バレットを増やす
     {
+
         Bullet0.Add(bullet);
+
     }
 
-    //GameObject/////////////////////////////////////////////
-    public GameObject[] Magic;//魔法の大本。PlayerのみこれをMuzzleとして使う
+    public GameObject[] Magic;//魔法の大本。これをMuzzleとして使う
     public GameObject[] SelectMagic = new GameObject[5];//隙間にセットされた魔法
     
-
 	//コルーチン
 	private Coroutine coroutine;
-	//private int count;//汎用のカウント用の箱(使い終わったら0に戻すこと)
 	private bool isCoroutine = false;
 
     //使うもの
-
     private Magic_Parameter.InputType InputType;
 
     void Awake()
@@ -100,21 +96,19 @@ public class Magic_Controller : MonoBehaviour{
     {
 
         MagicSelect();
-
-        //InputType = Magic[magic_num].GetComponent<Magic_Parameter>().inputtype;//選択してる弾のパラメタ読み込み
+        
         InputType = SelectMagic[magic_num].GetComponent<Magic_Parameter>().inputtype;//選択してる弾のパラメタ読み込み
 
         if (Pz.GetF_Magic())//魔法が打てる状態かどうかを確認
         {
-            //if (Magic[magic_num].GetComponent<Magic_Parameter>().spend_MP <= Pz.M_point)//使うMP < 現MPだったら魔法が打てる
+        
             if (SelectMagic[magic_num].GetComponent<Magic_Parameter>().spend_MP <= Pz.M_point)//使うMP < 現MPだったら魔法が打てる
             {
-                //if(this.existBullet[magic_num] < Magic[magic_num].GetComponent<Magic_Parameter>().GetExNum())//いまだしてる弾の数 < 出せる弾の数
-                //if (this.Bullet0.Count < Magic[magic_num].GetComponent<Magic_Parameter>().GetExNum())//いまだしてる弾の数 < 出せる弾の数
+
                 if (this.Bullet0.Count < SelectMagic[magic_num].GetComponent<Magic_Parameter>().GetExNum())//いまだしてる弾の数 < 出せる弾の数
                     MagicFire();
-            }
 
+            }
         }
 
 		coroutine = StartCoroutine (MPRecover ());
@@ -171,6 +165,7 @@ public class Magic_Controller : MonoBehaviour{
         {
             if (Bullet0[i] == null)
             {
+
                 Bullet0.RemoveAt(i);
 
             }
@@ -179,6 +174,7 @@ public class Magic_Controller : MonoBehaviour{
         {
             if (oldBullet0[i] == null)
             {
+
                 oldBullet0.RemoveAt(i);
 
             }
@@ -187,6 +183,7 @@ public class Magic_Controller : MonoBehaviour{
         {
             if (oldBullet1[i] == null)
             {
+
                 oldBullet1.RemoveAt(i);
 
             }
@@ -195,6 +192,7 @@ public class Magic_Controller : MonoBehaviour{
         {
             if (oldBullet2[i] == null)
             {
+
                 oldBullet2.RemoveAt(i);
 
             }
@@ -203,6 +201,7 @@ public class Magic_Controller : MonoBehaviour{
         {
             if (oldBullet3[i] == null)
             {
+
                 oldBullet3.RemoveAt(i);
 
             }
@@ -211,6 +210,7 @@ public class Magic_Controller : MonoBehaviour{
         {
             if (oldBullet4[i] == null)
             {
+
                 oldBullet4.RemoveAt(i);
 
             }
@@ -228,7 +228,6 @@ public class Magic_Controller : MonoBehaviour{
         }
         if (Input.GetAxis("Mouse ScrollWheel") == 1.0f)
         {
-
             if (magic_num == 0)
             {
                 
@@ -241,9 +240,7 @@ public class Magic_Controller : MonoBehaviour{
                 magic_num -= (int)Input.GetAxis("Mouse ScrollWheel");
 
             }
-
-            //bullet_parameter = null;//念のためパラメタリセット
-
+            
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") == -1.0f)
@@ -261,49 +258,11 @@ public class Magic_Controller : MonoBehaviour{
 
             }
 
-            //bullet_parameter = null;//念のためパラメタリセット
-
         }
 
         //ボタン式
         if (!isHold)
         {
-            /*
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-
-                if (magic_num == 0)
-                {
-
-                    magic_num = SelectMagic.Length - 1;
-
-                }
-                else
-                {
-
-                    magic_num -= 1;
-
-                }
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-
-                if (magic_num == SelectMagic.Length - 1)
-                {
-
-                    magic_num = 0;
-
-                }
-                else
-                {
-
-                    magic_num += 1;
-
-                }
-
-            }*/
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -329,11 +288,9 @@ public class Magic_Controller : MonoBehaviour{
             {
                 magic_num = 4;
             }
-
-
+            
         }
-
-
+        
     }
 
     void MagicFire()
@@ -344,8 +301,7 @@ public class Magic_Controller : MonoBehaviour{
             case Magic_Parameter.InputType.GetDown:
                 if (Input.GetButtonDown("Fire1"))
                 {
-
-                    //Magic[magic_num].SendMessage("Fire");
+                    
                     SelectMagic[magic_num].SendMessage("Fire");
 
                 }
@@ -353,16 +309,14 @@ public class Magic_Controller : MonoBehaviour{
             case Magic_Parameter.InputType.Get:
                 if (Input.GetButton("Fire1"))
                 {
-
-                    //Magic[magic_num].SendMessage("Hold");//ボタンおしっぱのとき
+                    
                     SelectMagic[magic_num].SendMessage("Hold");//ボタンおしっぱのとき
                     isHold = true;
 
                 }
                 if (Input.GetButtonUp("Fire1"))
                 {
-
-                    //Magic[magic_num].SendMessage("Fire");
+                    
                     SelectMagic[magic_num].SendMessage("Fire");
                     isHold = false;
 
@@ -371,9 +325,8 @@ public class Magic_Controller : MonoBehaviour{
             default:
                 if (Input.GetButtonDown("Fire1"))
                 {
-
-                    //Magic[magic_num].SendMessage("Fire");//魔法を制御しているScriptは1つ1つ名前が違うからしょうがない
-                    SelectMagic[magic_num].SendMessage("Fire");//魔法を制御しているScriptは1つ1つ名前が違うからしょうがない
+                    
+                    SelectMagic[magic_num].SendMessage("Fire");//魔法を制御しているScriptは1つ1つ名前が違う
 
                 }
                 break;
