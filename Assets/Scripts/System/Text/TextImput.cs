@@ -4,14 +4,14 @@ using UnityEngine.UI;//これが必要
 
 public class TextImput : MonoBehaviour {
 
-	new private Text guiText;
+    //インフォメーション表示管理
 
+	new private Text guiText;
 	private Static _static;
 	private Player_ControllerZ pcZ;
     private Magic_Controller mc;
     private Enemy_ControllerZ ecZ;
-
-	//public bool isCp = false;
+    
 	public enum Text_Type { 
         Day,//日付
         LP,//名声
@@ -23,7 +23,8 @@ public class TextImput : MonoBehaviour {
 	public Text_Type type = Text_Type.Day;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 
 		guiText = this.GetComponent<Text>();
 
@@ -31,12 +32,17 @@ public class TextImput : MonoBehaviour {
 		    case Text_Type.Day:
                 _static = GameObject.FindGameObjectWithTag("Manager").GetComponent<Static>();
 
-                if (_static.day - (int)_static.day == 0.5f) { 
+                if (_static.day - (int)_static.day == 0.5f)
+                { 
+
                     guiText.text = (int)_static.day + "日目　夜";
+
                 }
                 else
                 {
+
                     guiText.text = (int)_static.day + "日目　昼";
+
                 }
 			    break;
             case Text_Type.LP:
@@ -48,19 +54,15 @@ public class TextImput : MonoBehaviour {
                 guiText.text = "BP　" + _static.bonus_P;
                 break;
 		    case Text_Type.HP:
-
 			    pcZ = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player_ControllerZ>();
 			    break;
 			case Text_Type.MP:
-			
 				pcZ = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player_ControllerZ>();
 				break;
             case Text_Type.Magic:
-
                 mc = GameObject.FindGameObjectWithTag("Player").GetComponent<Magic_Controller>();
                 break;
             case Text_Type.Enemy:
-
 			    ecZ = GameObject.Find("Boss_DarkLilith").GetComponent<Enemy_ControllerZ>();
 			    break;
 		    default:
@@ -70,7 +72,8 @@ public class TextImput : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 
 		switch (type) {
             case Text_Type.Day:
@@ -78,11 +81,15 @@ public class TextImput : MonoBehaviour {
 
                 if (_static.day - (int)_static.day == 0.5f)
                 {
+
                     guiText.text = (int)_static.day + "日目　夜";
+
                 }
                 else
                 {
+
                     guiText.text = (int)_static.day + "日目　昼";
+
                 }
                 break;
             case Text_Type.HP:
@@ -90,11 +97,9 @@ public class TextImput : MonoBehaviour {
 			guiText.text = "CP " + pcZ.H_point;
 			break;
 		case Text_Type.MP:
-			
 			guiText.text = "MP " + pcZ.M_point;
 			break;
         case Text_Type.Magic:
-
             guiText.text = "S " + mc.SelectMagic[mc.magic_num].name;
             break;
         case Text_Type.Enemy:

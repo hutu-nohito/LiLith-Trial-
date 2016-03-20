@@ -17,8 +17,9 @@ public class Attack_Parameter : MonoBehaviour {
     public float rigid_time = 5.0f; //硬直時間
     public float GetR_Time() { return rigid_time; }
 
+    //魔法の属性
     public enum MagicElement
-    {//魔法の属性
+    {
         Earth,//地
         Water,//水
         Fire,//火
@@ -27,8 +28,9 @@ public class Attack_Parameter : MonoBehaviour {
     public MagicElement magicElement = MagicElement.Earth;
     public string GetElement() { return magicElement.ToString(); }
 
+    //攻撃の特性
     public enum Property
-    {//攻撃の特性
+    {
         NaN,//無
         Blow,//打撃
         Assailt,//突撃

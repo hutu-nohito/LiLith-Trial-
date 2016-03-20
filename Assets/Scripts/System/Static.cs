@@ -6,11 +6,10 @@ using System.Collections.Generic;
 
 public class Static : MonoBehaviour {
 
-    //使いまわすパラメタ//
+    //保存するパラメタの管理//
     //資料：StreamWriter クラス (System.IO)
     //http://msdn.microsoft.com/ja-jp/library/system.io.streamwriter(v=vs.110).aspx
-
-
+    
     //保存したいデータを常にここで更新しとく
     public float day = 1;//何日目か
     public float GetDay() { return day; }
@@ -39,7 +38,6 @@ public class Static : MonoBehaviour {
     /*
      * ここに隙間の状態と持ってるデータの情報 
      */
-    //public int[] MasekiNum;
     public int currentPallete = 1;//現在装備中のパレット
     public int[] SelectMagicID = new int[5];//パレットで選択されてる魔法
 
@@ -55,19 +53,20 @@ public class Static : MonoBehaviour {
         }
         else
         {
+
             Destroy(this.gameObject);
+
         }
 
     }
 
     //セーブ&ロード
-
-    public string folder;    //これだけでunityの実行ファイルがあるフォルダがわかる
+    public string folder;    //これでunityの実行ファイルがあるフォルダがわかる
     private string[] SaveData = new string[5];//保存したい一個一個の要素
-    //public TextAsset _Text;//保存用テキストファイル
 
     void Start()
     {
+
         //このObjectはずっと残るので、とりあえずここで初期化しとく。順番は固定。
         SaveData[0] = GetDay().ToString();
         SaveData[1] = GetHP().ToString();
@@ -78,23 +77,10 @@ public class Static : MonoBehaviour {
         folder = Application.dataPath;
 
     }
-
-    void Update()
-    {
-        //debug
-        /*if (Input.GetKeyDown(KeyCode.K))
-        {
-            Save();
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Load();
-        }*/
-
-    }
-
+    
     public void Save()
     {
+
         //セーブを呼び出した段階でのパラメタを格納
         SaveData[0] = GetDay().ToString();
         SaveData[1] = GetHP().ToString();
@@ -103,10 +89,12 @@ public class Static : MonoBehaviour {
         SaveData[4] = GetBP().ToString();
 
         SaveText(folder, @"\savedata.txt", SaveData);
+
     }
 
     public void Load()
     {
+
         SaveData = LoadText(folder, @"\savedata.txt");
 
         SetDay(float.Parse(SaveData[0]));
@@ -114,17 +102,20 @@ public class Static : MonoBehaviour {
         SetMP(int.Parse(SaveData[2]));
         SetLP(int.Parse(SaveData[3]));
         SetBP(int.Parse(SaveData[4]));
+
     }
 
     //テキストファイルとしてセーブ,上書き
     //ファイルを作るパス、作るファイルの名前、書きこむ文字列
     public void SaveText(string fileFolder, string filename, string[] dataStr)
     {
-        using (StreamWriter w = new StreamWriter(fileFolder + filename))//たぶんパスを作ってそこに書き込んでる、あったら作らずに書き込む
+        using (StreamWriter w = new StreamWriter(fileFolder + filename))//パスを作ってそこに書き込んでる、あったら作らずに書き込む
         {
             foreach (var item in dataStr)//foreachはitemにいったんdataStrを格納してから処理をしてる気がする
             {
+
                 w.WriteLine(item);
+
             }
         }
     }
@@ -132,13 +123,16 @@ public class Static : MonoBehaviour {
     //ローダー
     public string[] LoadText(string fileFolder, string filename)
     {
+
         List<string> strList = new List<string>();
         string line = "";
         using (StreamReader sr = new StreamReader(fileFolder + filename))
         {
             while ((line = sr.ReadLine()) != null)
             {
+
                 strList.Add(line);
+
             }
         }
         return strList.ToArray();

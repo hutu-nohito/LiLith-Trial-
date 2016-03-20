@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Tyutorial : MonoBehaviour {
 
+    //チュートリアルイベント管理
+
     private Player_ControllerZ pcZ;
     private Static _static;
     public GameObject[] tyuto = new GameObject[3];
@@ -16,7 +18,9 @@ public class Tyutorial : MonoBehaviour {
 
         for(int i = 0; i < 3; i++)
         {
+
             istyuto[i] = false;
+
         }
 
 	}
@@ -26,7 +30,6 @@ public class Tyutorial : MonoBehaviour {
 	
         if(_static.day == 1)
         {
-            
             if (!istyuto[2])
             {
                 pcZ.SetKeylock();
@@ -35,9 +38,11 @@ public class Tyutorial : MonoBehaviour {
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
+
                         istyuto[2] = true;
                         tyuto[2].SetActive(false);
                         pcZ.SetActive();
+
                     }
                 }
                 else
@@ -49,26 +54,27 @@ public class Tyutorial : MonoBehaviour {
 
                         if (Input.GetMouseButtonDown(0))
                         {
+
                             istyuto[0] = true;
                             tyuto[0].SetActive(false);
                             tyuto[1].SetActive(true);
+
                         }
                     }
                     else
                     {
                         if (Input.GetMouseButtonDown(0))
                         {
+
                             istyuto[1] = true;
                             tyuto[1].SetActive(false);
                             tyuto[2].SetActive(true);
+
                         }
                     }
                 }
-                
-
-                
             }
-          
         }
 	}
+
 }

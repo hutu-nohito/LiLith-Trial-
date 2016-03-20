@@ -4,9 +4,9 @@ using System.Collections;
 public class Pause : MonoBehaviour {
 
     //Zボタンでポーズ
+
     public GameObject PauseBoad;
     private bool isPause = false;
-
     private QuestManager QM;
     private Player_ControllerZ PCZ;
 
@@ -25,34 +25,44 @@ public class Pause : MonoBehaviour {
         {
             if (isPause)
             {
+
                 PCZ.SetActive();
                 PauseBoad.SetActive(false);
                 Time.timeScale = 1;
                 isPause = false;
+
             }
             else
             {
+
                 PCZ.SetKeylock();
                 PauseBoad.SetActive(true);
                 Time.timeScale = 0;
                 isPause = true;
+
             }
         }
 	}
 
+    //続ける
     public void Continue()
     {
+
         PCZ.SetActive();
         PauseBoad.SetActive(false);
         Time.timeScale = 1;
         isPause = false;
+
     }
 
+    //やめる
     public void Quit()
     {
+
         PCZ.SetActive();
         Time.timeScale = 1;
         QM.Questfailure();
+
     }
 
 

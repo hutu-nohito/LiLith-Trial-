@@ -8,7 +8,6 @@ public class Guild : MonoBehaviour {
     private int quest_num = 0;//どのクエストを選んだか
 
 	public GameObject[] Quest_paper;
-
 	private QuestManager qM;
 	private Quest_Parameter quest_parameter;
     private SceneManager sM;
@@ -20,42 +19,24 @@ public class Guild : MonoBehaviour {
 
     void Awake()
     {
+
         qM = GameObject.FindGameObjectWithTag("Manager").GetComponent<QuestManager>();
         sM = GameObject.FindGameObjectWithTag("Manager").GetComponent<SceneManager>();
         _static = GameObject.FindGameObjectWithTag("Manager").GetComponent<Static>();
 
+        //初期化
         Camera.main.transform.position = CameraPos[0].transform.position;
 
         //ここでクエストから帰ってきた時の処理
-
         if (qM.isQuest)
         {
             _static.day += qM.quest_time;//失敗・成功にかかわらず終わったクエストのクエストタイムを加算
             qM.isQuest = false;//おろしとかないと家とギルドの往復で日にちが過ぎてく。
-
-            /*//昼になったらクエスト期間を減らす
-            if (_static.day - (int)_static.day == 0)//dayが偶数の時昼
-            {
-                for (int i = 0; i < 6; i++)//全部のクエストぺーパーのクエスト期間を1減少させる
-                {
-                    Quest_paper[i].GetComponent<Quest_Parameter>().SetTerm(Quest_paper[i].GetComponent<Quest_Parameter>().GetTerm() - 1); ;
-                    //張り出し期間が終了したら入れ替える
-                    if (Quest_paper[i].GetComponent<Quest_Parameter>().GetTerm() <= 0)
-                    {
-                        Quest_Refresh(i);//終了したクエスト
-                    }
-                }
-
-            }*/
-
+            
         }
     }
-	// Use this for initialization
-	void Start () {
 
-	}
-
-    //カメラ動かすよう
+    //カメラ動かす用
     public float MoveTime = 2;
     private float elapsedTime = 0;
     public GameObject[] CameraPos;
@@ -72,27 +53,35 @@ public class Guild : MonoBehaviour {
         {
             if (Input.GetMouseButtonDown(0))
             {
+
                 Tyuto.SetActive(false);
+
             }
         }
 
         if (isMove)//カメラ用
         {
+
             elapsedTime += Time.deltaTime;
             Camera.main.transform.position += (CameraPos[camNum].transform.position - Camera.main.transform.position).normalized * 15 * Time.deltaTime;
 
             if(elapsedTime > MoveTime)
             {
+
                 Camera.main.transform.position = CameraPos[camNum].transform.position;
                 elapsedTime = 0;
                 isMove = false;
                 if(camNum == 1)
                 {
+
                     QuestBoad.SetActive(true);
+
                 }
                 if(camNum == 0)
                 {
+
                     EntranceBoad.SetActive(true);
+
                 }
             }
         }
@@ -105,19 +94,24 @@ public class Guild : MonoBehaviour {
         {
             if (!flag_onetime)
             {
+
                 flag_onetime = true;
                 Invoke("OneTime", 2);
+
             }
         }
         
         EntranceBoad.SetActive(false);
         isMove = true;
         camNum = 1;
+
     }
 
     void OneTime()
     {
+
         Tyuto.SetActive(true);
+
     }
 
     public void Entrance()
@@ -131,38 +125,46 @@ public class Guild : MonoBehaviour {
 
     public void Home()
     {
+
         sM.Home();
+
     }
 
     //クエスト掲示板/////////////////////////////////////////////////////////
-
     public void Quest0 (){
 
         if (_static.day - (int)_static.day == 0)//昼だったら
         {
+
             Quest_paper[0].SetActive(!Quest_paper[0].activeSelf);
             quest_num = 0;
+
         }
         else//夜だったら
         {
+
             Quest_paper[4].SetActive(!Quest_paper[4].activeSelf);
             quest_num = 4;
+
         }
 		
 
 	}
-	
 	public void Quest1 (){
 
         if (_static.day - (int)_static.day == 0)//昼だったら
         {
+
             Quest_paper[1].SetActive(!Quest_paper[1].activeSelf);
             quest_num = 1;
+
         }
         else//夜だったら
         {
+
             Quest_paper[5].SetActive(!Quest_paper[5].activeSelf);
             quest_num = 5;
+
         }
 	}
     public void Quest2()
@@ -170,33 +172,38 @@ public class Guild : MonoBehaviour {
 
         if (_static.day - (int)_static.day == 0)//昼だったら
         {
+
             Quest_paper[2].SetActive(!Quest_paper[2].activeSelf);
             quest_num = 2;
+
         }
         else//夜だったら
         {
+
             Quest_paper[6].SetActive(!Quest_paper[6].activeSelf);
             quest_num = 6;
+
         }
        
     }
-
     public void Quest3()
     {
         if (_static.day - (int)_static.day == 0)//昼だったら
         {
+
             Quest_paper[3].SetActive(!Quest_paper[3].activeSelf);
             quest_num = 3;
 
         }
         else//夜だったら
         {
+
             Quest_paper[7].SetActive(!Quest_paper[7].activeSelf);
             quest_num = 7;
+
         }
        
     }
-
     public void Quest4()
     {
 
@@ -273,14 +280,11 @@ public class Guild : MonoBehaviour {
 		Quest_paper[quest_num].SetActive(!Quest_paper[quest_num].activeSelf);
 		
 	}
-
-    //情報掲示板/////////////////////////////////////////////////////////
-
-    //BP交換所/////////////////////////////////////////////////////////
-
+    
     //クエスト番号をもらって入れ替え　ここに全クエスト書いとく
     private void Quest_Refresh(int num)
     {
+
         //入れ替え用の箱を用意
         int quest_ID = 0;//クエスト識別番号
         string QuestName = "Lilith";//クエストの名前

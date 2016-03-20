@@ -5,7 +5,7 @@ using UnityEngine.UI;//uGUI用
 public class uGUI_Msg : MonoBehaviour {
 
     /*
-        テキストに入ってるものを表示
+        テキストに入ってる文章を表示
     */
 
     new private Text guiText;
@@ -21,6 +21,7 @@ public class uGUI_Msg : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+
         _Text = Text;
         guiText = UI_Text.GetComponent<Text>();
         readMap(_Text);
@@ -31,16 +32,13 @@ public class uGUI_Msg : MonoBehaviour {
     //元からあったの
     public static string[] dispMsg;//テキスト1文(メッセージ)
     public static int lengthMsg;			//メッセージの何文字めか
-
     public bool flag = false;
     public static bool flgDisp = false;	//表示フラグ
     public static float waitTime = 0;//メッセージが消えるまでの待ち時間
 
     //自分でつくったの
     public static int lengthSecenario = 0;//テキスト全体(シナリオ)の何段目か
-
     float nextTime = 0;//次の文字の表示間隔
-
     public GameObject TextFinish;//テキストを表示し終わったときにちかちかするアイコン
 
     //テキスト読み込み。もらってきた今表示したいテキストを分割して配列に格納
@@ -58,29 +56,34 @@ public class uGUI_Msg : MonoBehaviour {
     void Update()
     {
         
-        //メセージ表示状態時のみ処理を行う
+        //メッセージ表示状態時のみ処理を行う
         if (flgDisp == true)
         {
+
             UI_Window.SetActive(true);
             //何段目の何文字目を表示するか
             guiText.text = dispMsg[lengthSecenario].Substring(0, lengthMsg);
 
             //nextTimeになるのを待ってから1文字増やして表示
+            //次の文字の表示時間を越えたら
             if (Time.time > nextTime)
-            {			//次の文字の表示時間を越えたら
+            {
 
+                //文字の長さが最大でなければ
                 if (lengthMsg < dispMsg[lengthSecenario].Length)
-                {	//文字の長さが最大でなければ
+                {	
 
                     lengthMsg++;//次の文字へ
 
                 }
 
                 nextTime = Time.time + (1.0f - Text_spead);	//次の文字の表示間隔
+
             }
 
+            //メッセージを全部表示していたら 
             if (lengthMsg >= dispMsg[lengthSecenario].Length)
-            {       //メッセージを全部表示していたら 
+            {       
 
                 TextFinish.SetActive(true);
 

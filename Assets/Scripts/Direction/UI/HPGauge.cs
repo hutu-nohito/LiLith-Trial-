@@ -4,15 +4,14 @@ using System.Collections;
 
 public class HPGauge : MonoBehaviour
 {
+    //体力ゲージの管理
 
     private Image circleGauge; // CircleGauge
-
     private Player_ControllerZ pcZ;
     private float maxHP = 100;
     private float oldHP = 100;
     private float maxMP = 100;
     private float oldMP = 100;
-
     private bool isGauge = false;
     private float time = 0;
     private float deltaGauge = 0;//ゲージの変化量
@@ -27,6 +26,7 @@ public class HPGauge : MonoBehaviour
 
     void Start()
     {
+
         circleGauge = GetComponent<Image>();
         pcZ = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_ControllerZ>();
 
@@ -48,14 +48,18 @@ public class HPGauge : MonoBehaviour
 
     void Update()
     {
+
         changePicturesUpdate();
+
     }
 
     void changePicturesUpdate()
     {
+
         //ゲージをゆっくり変化させる
         if (isGauge)
         {
+
             if(circleGauge.fillAmount >= 0 || circleGauge.fillAmount <= 1)//範囲指定
             circleGauge.fillAmount += deltaGauge / deltaTime * Time.deltaTime;
             time += Time.deltaTime;
@@ -75,6 +79,7 @@ public class HPGauge : MonoBehaviour
                 }
                 time = 0;
                 isGauge = false;
+
             }
 
 
@@ -88,32 +93,38 @@ public class HPGauge : MonoBehaviour
 
                     if (isGauge)
                     {
+
                         time = 0;//いったん切る
                         deltaGauge = pcZ.GetHP() / maxHP - circleGauge.fillAmount;
 
                     }
                     else
                     {
-                        isGauge = true;
-                    }
 
+                        isGauge = true;
+
+                    }
                 }
                 oldHP = pcZ.GetHP();
                 break;
             case GaugeType.MP:
                 if (pcZ.GetMP() != oldMP)
                 {
-                    deltaGauge = (pcZ.GetMP() - oldMP) / maxMP; ;
+
+                    deltaGauge = (pcZ.GetMP() - oldMP) / maxMP;
 
                     if (isGauge)
                     {
+
                         time = 0;//いったん切る
                         deltaGauge = pcZ.GetMP() / maxMP - circleGauge.fillAmount;
 
                     }
                     else
                     {
+
                         isGauge = true;
+
                     }
                     
                 }
@@ -123,4 +134,5 @@ public class HPGauge : MonoBehaviour
                 break;
         }       
     }
+
 }

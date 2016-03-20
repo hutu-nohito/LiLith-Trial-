@@ -11,7 +11,6 @@ public class Home : MonoBehaviour {
     public GameObject LeftButton;
     public GameObject save_text;
     public GameObject bed_text;
-
     private int Rotnum = 0;//今どっちを向いてるか
     private bool isRot = false;
     private float RotAng = 72;
@@ -23,9 +22,8 @@ public class Home : MonoBehaviour {
 	void Start () {
         
         Manager = GameObject.FindGameObjectWithTag("Manager");
-        //newAng = new Vector3(0, Camera.main.transform.eulerAngles.y + 72, 0);
 
-        //一応初期化
+        //初期化
         Button[0].SetActive(true);
         for (int i = 1;i < Button.Length;i++)
         {
@@ -42,6 +40,7 @@ public class Home : MonoBehaviour {
         //カメラを回す
         if (isRot)
         {
+
             for (int i = 0; i < Button.Length; i++)
             {
 
@@ -54,14 +53,17 @@ public class Home : MonoBehaviour {
             
             if(elapsedTime > RotTime)
             {
+
                 Camera.main.transform.eulerAngles = newAng;
                 elapsedTime = 0.0f;
                 isRot = false;
+
             }
-            //
+            
         }
         else
         {
+
             switch (Rotnum)
             {
                 case 0:
@@ -80,69 +82,74 @@ public class Home : MonoBehaviour {
                     Button[4].SetActive(true);
                     break;
             }
-        }    
-        
+
+        }
     }
 
     public void Guild()
     {
+
         Manager.GetComponent<SceneManager>().Guild();
+
     }
     public void SaveText()
     {
-        //確認を出す
 
         Button[1].SetActive(false);
         save_text.SetActive(true);
+
     }
     public void Save()
     {
+
         //ゲームをやめる
         Application.Quit();
-        //Save
-        /*Manager.GetComponent<Static>().Save();
-        Manager.GetComponent<SceneManager>().Fade();*/
-        //Button[1].SetActive(true);
+
     }
     public void Bed()
     {
-        //確認を出す
-        
-        //これで暗転して戻るはず
+
+        //これで暗転して戻る
         Manager.GetComponent<SceneManager>().Fade();
         Manager.GetComponent<Static>().SetDay(0.5f);//半日進める
         Manager.GetComponent<Static>().SetHP(100);//体力全快
-
-        //音鳴らす
+        
     }
     public void Sound()
     {
+
         //サウンドテストのシーンへ
-        //Manager.GetComponent<SceneManager>().Guild();
+
     }
     public void Sukima()
     {
+
         //スキマのシーンへ
         Manager.GetComponent<SceneManager>().Sukima();
+
     }
 
     public void Right()
     {
         if (!isRot)
         {
+
             RotAng = 72;
             newAng = new Vector3(0, Camera.main.transform.eulerAngles.y + RotAng, 0);
             isRot = true;
 
             if(Rotnum < 4)
             {
+
                 Rotnum++;
+
             }
             else
             {
+
                 Rotnum = 0;
+
             }
-            
         }
         
     }
@@ -151,17 +158,24 @@ public class Home : MonoBehaviour {
     {
         if (!isRot)
         {
+
             RotAng = -72;
             newAng = new Vector3(0, Camera.main.transform.eulerAngles.y + RotAng, 0);
             isRot = true;
+
             if (Rotnum > 0)
             {
+
                 Rotnum--;
+
             }
             else
             {
+
                 Rotnum = 4;
+
             }
         }
     }
+
 }

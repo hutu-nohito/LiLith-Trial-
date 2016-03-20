@@ -12,15 +12,7 @@ public class SukimaCanvas : MonoBehaviour {
 
     //こっちでシステム全体の管理
     //魔石運びもこっち
-
-    /*
-    public Button[][] Waku;
-    public GameObject[] Maseki_Button;//魔石置き場
-    public int Kind_Maseki = 0;//持ってる魔石の種類
-    public int[] MasekiNum;//staticから拾ってくる
-    public Vector3[] Maseki_ButtonPos = new Vector3[4];//動いちゃうから保持
-    private GameObject Maseki;//インスタンス用
-    */
+    
     private GameObject Manager;
     public GameObject[] SelectPallete = new GameObject[5];//パレットのオブジェクト
     private int currentPallete = 0;//現在選択中のパレット
@@ -36,7 +28,9 @@ public class SukimaCanvas : MonoBehaviour {
         currentPallete = Manager.GetComponent<Static>().currentPallete;
         for(int i = 0;i < selectMagicID.Length;i++)
         {
+
             selectMagicID[i] = Manager.GetComponent<Static>().SelectMagicID[i];
+
         }
 
         //いったん全部消してから付け直す
@@ -46,58 +40,31 @@ public class SukimaCanvas : MonoBehaviour {
         }
 
         SelectPallete[currentPallete - 1].SetActive(true);//一個ずれてる
-
-
-        /*
-        for (int i = 0; i < MasekiNum.Length; i++)
-        {
-            MasekiNum[i] = Manager.GetComponent<Static>().MasekiNum[i];
-        }
-            
-        for(int i = 0; i < Maseki_Button.Length; i++)
-        {
-            Maseki_ButtonPos[i] = Maseki_Button[i].transform.position;
-        }
-        */
-
+        
     }
 	
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-    /*
-    void OnMouseOver()
-    {
-        print("MouseOver!");
-    }
-
-    //魔石がドラッグされてるとき
-    public void PointHi()
-    {
-        Maseki = Instantiate(Maseki_Button[2]);
-        Maseki.transform.position = Maseki_ButtonPos[2];
-        Maseki.transform.parent = transform;
-        Kind_Maseki = 2;
-    }
-    */
     //右ボタン
     public void Right()
     {
         if (currentPallete < 5)
         {
+
             currentPallete++;
+
         }
         else
         {
+
             currentPallete = 1;
+
         }
 
         //いったん全部消してから付け直す
         for (int i = 0;i < 5; i++)
         {
+
             SelectPallete[i].SetActive(false);
+
         }
 
         SelectPallete[currentPallete - 1].SetActive(true);//一個ずれてる
@@ -107,19 +74,26 @@ public class SukimaCanvas : MonoBehaviour {
     //左ボタン
     public void Left()
     {
+
         if (currentPallete > 1)
         {
+
             currentPallete--;
+
         }
         else
         {
+
             currentPallete = 4;
+
         }
 
         //いったん全部消してから付け直す
         for (int i = 0; i < 5; i++)
         {
+
             SelectPallete[i].SetActive(false);
+
         }
 
         SelectPallete[currentPallete - 1].SetActive(true);//一個ずれてる
@@ -172,9 +146,13 @@ public class SukimaCanvas : MonoBehaviour {
 
         for (int i = 0; i < selectMagicID.Length; i++)
         {
+
             Manager.GetComponent<Static>().SelectMagicID[i] = selectMagicID[i];
+
         }
 
         Manager.GetComponent<SceneManager>().Home();//ホームへ
+
     }
+
 }

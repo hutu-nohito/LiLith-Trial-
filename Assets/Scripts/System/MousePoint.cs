@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MousePoint : MonoBehaviour {
 
+    //マウスの位置を取得
+
 	public Vector3 worldPoint = Vector3.zero;
 	public float z_position = 50.0f;
 	

@@ -8,7 +8,6 @@ public class EffectManager : MonoBehaviour {
 	public GameObject[] Effect;//実際に出てくるエフェクト
 	public float[] WaitTime;//待ち時間
 	private bool isEffect = false;
-
 	private Coroutine coroutine;//コルーチン用の箱
 
 	// Use this for initialization
@@ -17,15 +16,6 @@ public class EffectManager : MonoBehaviour {
 		coroutine = StartCoroutine(EffectUpdate());
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-	/*IEnumerator EffectStart (){
-
-	}*/
 
 	IEnumerator EffectUpdate (){
 
@@ -40,4 +30,5 @@ public class EffectManager : MonoBehaviour {
 		Effect [1].SetActive (true);
 
 	}
+
 }

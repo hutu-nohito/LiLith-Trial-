@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 public class Text_C : MonoBehaviour 
 {
+
+    //文字の表示
+
 	public string[] scenarios;
 	[SerializeField] Text uiText;
 	
@@ -23,7 +26,9 @@ public class Text_C : MonoBehaviour
 	// 文字の表示が完了しているかどうか
 	public bool IsCompleteDisplayText 
 	{
+
 		get { return  Time.time > timeElapsed + timeUntilDisplay; }
+
 	}
 	
 	void Start()
@@ -37,53 +42,69 @@ public class Text_C : MonoBehaviour
 	//文字読み込み
 	void readMap()
 	{
+
 		char[] kugiri = {'#'};//テキストを区切る記号設定
 		//テキストを一行づつ区切る
 		text = _Text.text.Split(kugiri);
-		for(int i = 0;i < text.Length ;i++){
+		for(int i = 0;i < text.Length ;i++)
+        {
 
 			scenarios[i] = text[i];
 
 		}
+
 	}
-	
-	//
 	
 	void Update () 
 	{
+
 		// 文字の表示が完了してるならクリック時に次の行を表示する
-		if( IsCompleteDisplayText ){
-			if(currentLine < scenarios.Length && Input.GetMouseButtonDown(0)){
+		if( IsCompleteDisplayText )
+        {
+			if(currentLine < scenarios.Length && Input.GetMouseButtonDown(0))
+            {
+
 				SetNextLine();
+
 			}
-		}else{
+		}else
+        {
+
 			// 完了してないなら文字をすべて表示する
-			if(Input.GetMouseButtonDown(0)){
+			if(Input.GetMouseButtonDown(0))
+            {
+
 				timeUntilDisplay = 0;
+
 			}
 		}
 		
 		int displayCharacterCount = (int)(Mathf.Clamp01((Time.time - timeElapsed) / timeUntilDisplay) * currentText.Length);
-		if( displayCharacterCount != lastUpdateCharacter ){
+		if( displayCharacterCount != lastUpdateCharacter )
+        {
+
 			uiText.text = currentText.Substring(0, displayCharacterCount);
 			lastUpdateCharacter = displayCharacterCount;
+
 		}
 
-		if(currentLine >= text.Length){
+		if(currentLine >= text.Length)
+        {
 
 			currentLine = 1;
 
 		}
 	}
 	
-	
 	void SetNextLine()
 	{
+
 		currentText = scenarios[currentLine];
 		timeUntilDisplay = currentText.Length * intervalForCharacterDisplay;
 		timeElapsed = Time.time;
 		currentLine++;
 		lastUpdateCharacter = -1;
+
 	}
 
 }

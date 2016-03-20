@@ -4,7 +4,7 @@ using System.Collections;
 public class Event_Manager : MonoBehaviour {
 
     //特別なイベントがある場合にこれが呼び出される(Manager)
-    //ついでにインフォメーションのON/OFF管理
+    //インフォメーションのON/OFF管理
 
 	public TextAsset[] EventText;//ここにイベント用のテキストを格納
     private bool[] EventFlag = new bool[100];//イベントフラグ、使ったらおろしてく
@@ -17,13 +17,11 @@ public class Event_Manager : MonoBehaviour {
 	public GameObject Canvas;//UI
     public GameObject Information;//情報表示
     public uGUI_Msg uGM;
-
     private Static save;//日数、起動回数、HP、MP、名声、ボーナスポイント
     private SceneManager SM;
 
 	//コルーチン
 	private Coroutine coroutine;
-	private int count;//汎用のカウント用の箱(使い終わったら0に戻すこと)
 	private bool isCoroutineH = false;
 	private bool isCoroutineG = false;
 
@@ -33,8 +31,9 @@ public class Event_Manager : MonoBehaviour {
         save = GetComponent<Static>();
         SM = GetComponent<SceneManager>();
 		Canvas = GameObject.Find ("Msg_Canvas");
-
         uGM = Canvas.GetComponent<uGUI_Msg>();
+
+        //初期化
         uGM.enabled = false;//消しとく
 
         for(int i = 0;i < EventFlag.Length; i++)
@@ -43,15 +42,11 @@ public class Event_Manager : MonoBehaviour {
         }
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
 
     //シーンが変わったらイベントチェック
     void Check_Event()
     {
+
         if(Application.loadedLevelName == "Home")
             StartCoroutine(Home_T());
 
@@ -60,11 +55,15 @@ public class Event_Manager : MonoBehaviour {
 
         if (Application.loadedLevelName == "Title")
         {
+
             Information.SetActive(false);
+
         }
         else
         {
+
             Information.SetActive(true);
+
         }
 
     }
@@ -79,6 +78,7 @@ public class Event_Manager : MonoBehaviour {
         {
             if (save.GetDay() == 1)
             {
+
                 uGM.enabled = true;//つける
                 uGM.dispMessage(EventText[0]);//表示する
                 EventFlag[0] = true;
@@ -96,10 +96,9 @@ public class Event_Manager : MonoBehaviour {
 
         if (!EventFlag[1])
         {
-            
-
             if (save.GetDay() == 1)
             {
+
                 uGM.enabled = true;//つける
                 uGM.dispMessage(EventText[1]);//表示する
                 EventFlag[1] = true;

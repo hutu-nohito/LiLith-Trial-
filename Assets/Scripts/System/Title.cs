@@ -12,30 +12,26 @@ public class Title : MonoBehaviour {
 	void Start () {
 
         Manager = GameObject.FindGameObjectWithTag("Manager");
-
-        //たぶんここでロード
-        //Manager.GetComponent<Static>().Load();
-
+        
         if (Manager.GetComponent<Static>().count_Start == 0)
         {
+
             Button[0].SetActive(true);
+
         }
         else
         {
+
             Button[1].SetActive(true);
+
         }
 
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-            //何秒たったらムービーとかそのうち追加
 	}
 
+    //はじめから
     public void First()
     {
+
         //セーブデータを初期化
         Manager.GetComponent<Static>().day = 1;
         Manager.GetComponent<Static>().count_Start = 0;
@@ -45,10 +41,15 @@ public class Title : MonoBehaviour {
         Manager.GetComponent<Static>().bonus_P = 0;
 
         Manager.GetComponent<SceneManager>().GameStart();//ホームへ
+
     }
 
+    //続きから
     public void Continue()
     {
+
         Manager.GetComponent<SceneManager>().GameStart();//ホームへ
+
     }
+
 }
